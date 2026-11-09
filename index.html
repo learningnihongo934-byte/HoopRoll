@@ -78,7 +78,16 @@ tr.me td{color:var(--acc);font-weight:700}
 .pcard.dark{color:#fff}
 .pcard .o{font-size:38px;font-weight:900;line-height:1}
 .pcard .p{font-weight:800}
-.pcard .sil{position:absolute;right:8px;top:40px;font-size:64px;opacity:.85}
+.pcard .ph{position:absolute;left:8px;right:8px;top:8px;bottom:56px;border-radius:10px;overflow:hidden;background:linear-gradient(#0003,#0006);display:flex;align-items:center;justify-content:center}
+.pcard .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 18%}
+.pcard .sil{font-size:64px;opacity:.85}
+.pcard .o,.pcard .p{position:relative;z-index:1;color:#fff;text-shadow:0 2px 6px #000,0 0 2px #000}
+.av{width:34px;height:34px;border-radius:50%;object-fit:cover;object-position:50% 15%;background:#0004;border:2px solid var(--tc);flex:none}
+.grid div{display:flex;gap:6px;align-items:center}.grid .av{width:26px;height:26px}
+#adm{position:fixed;inset:0;background:#000b;z-index:20;display:flex;align-items:center;justify-content:center;padding:16px}
+#adm .panel{width:min(520px,100%);max-height:90vh;overflow:auto;border-color:var(--acc)}
+#adm input,#adm select{background:#11152a;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:7px;font-size:14px;flex:1;min-width:0}
+#credits{font-size:11px;color:var(--dim);max-height:240px;overflow:auto}
 .pcard .n{position:absolute;left:10px;right:10px;bottom:30px;font-weight:900;font-size:16px;line-height:1.1;text-transform:uppercase}
 .pcard .t{position:absolute;left:10px;bottom:9px;font-size:11px;font-weight:800;letter-spacing:2px}
 .pcard.opal{background:conic-gradient(from var(--a,0deg),#ff9ad5,#9ae6ff,#b9ff9a,#fff59a,#ff9ad5);animation:opal 3s linear infinite}
@@ -97,7 +106,7 @@ tr.me td{color:var(--acc);font-weight:700}
 #ov{overflow-y:auto;justify-content:safe center;padding-bottom:20px}
 @media(max-width:600px){
   .flip{width:118px;height:174px}
-  .pcard{padding:7px}.pcard .o{font-size:28px}.pcard .sil{font-size:42px;top:30px}
+  .pcard{padding:7px}.pcard .o{font-size:28px}.pcard .sil{font-size:42px}.pcard .ph{left:6px;right:6px;top:6px;bottom:46px}
   .pcard .n{font-size:12px;bottom:30px;left:7px;right:7px}.pcard .t{font-size:9px;left:7px;bottom:7px;letter-spacing:1px}
   #stage{gap:8px;min-height:300px}.walk .clue{font-size:48px}
 }
@@ -136,6 +145,8 @@ tr.me td{color:var(--acc);font-weight:700}
     </div>
     <h2>Collection book <button class="alt sm" id="colToggle">Show</button></h2>
     <div id="colGrid" class="grid hidden"></div>
+    <h2>Photo credits <button class="alt sm" id="credToggle">Show</button></h2>
+    <div id="credits" class="hidden"></div>
   </section>
   <section class="panel">
     <h2>Your roster <span id="rosterCount" class="stat"></span></h2>
@@ -145,6 +156,20 @@ tr.me td{color:var(--acc);font-weight:700}
   </section>
 </main>
 <div id="ov" class="hidden"><button class="alt" id="skip">Skip ⏭</button><div id="stage"></div><div id="ovMsg"></div><div class="row" id="ovBtns"></div></div>
+<div id="adm" class="hidden"><div class="panel">
+  <h2>🔧 Admin panel <button class="alt sm" id="admClose" style="float:right">Close</button></h2>
+  <div class="row"><button class="sm" data-adm="rolls">+10 rolls</button><button class="sm" data-adm="coins">+1000 coins</button><button class="sm" data-adm="galaxy">Next pull = Galaxy</button><button class="sm" data-adm="holo">Next pull = Holo</button></div>
+  <h2>Give player</h2>
+  <div class="row"><input id="admSearch" placeholder="Search name…"><select id="admPick"></select><button class="sm" data-adm="give">Add to pulls</button></div>
+  <h2>Team</h2>
+  <div class="row"><button class="sm" data-adm="superteam">Fill roster with best 10</button><button class="sm" data-adm="clear">Clear roster</button></div>
+  <h2>Season</h2>
+  <div class="row"><button class="sm" data-adm="playoffs">Sim to playoffs</button><button class="sm" data-adm="title">Add a title</button><button class="sm" data-adm="seasonup">Season +1 (harder AI)</button></div>
+  <h2>Save</h2>
+  <div class="row"><button class="sm" data-adm="collect">Unlock whole collection</button><button class="sm alt" data-adm="reset">Reset all progress</button></div>
+  <div class="stat" id="admMsg" style="margin-top:8px"></div>
+</div></div>
+<script src="art.js"></script>
 <script>
 // [name, pos, ovr]. Ratings are rough fan estimates; names only.
 const DB = [
@@ -172,7 +197,7 @@ const DB = [
 ["Andre Iguodala","SF",80],["Shawn Marion","SF",82],["Rasheed Wallace","PF",82],["Chauncey Billups","PG",84],["Dikembe Mutombo","C",84],
 ["Alonzo Mourning","C",84],["Grant Hill","SF",84],["Penny Hardaway","PG",83],["Chris Webber","PF",84],["Yao Ming","C",85],
 ["Alex Caruso","SG",78],["Josh Hart","SG",79],["Aaron Gordon","PF",80],["Myles Turner","C",80],["Jarrett Allen","C",80],
-["Herb Jones","SF",78],["Derrick Lively II","C",78],["Austin Reaves","SG",80],["Coby White","SG",79],["Immanuel Quickley","PG",79],
+["Herb Jones","SF",78],["Dereck Lively II","C",78],["Austin Reaves","SG",80],["Coby White","SG",79],["Immanuel Quickley","PG",79],
 ["Jalen Duren","C",79],["Amen Thompson","SF",81],["Jalen Suggs","PG",78],["Dyson Daniels","SG",80],["Ivica Zubac","C",80],
 ["Norman Powell","SG",80],["Malik Monk","SG",77],["Bobby Portis","PF",77],["Kentavious Caldwell-Pope","SG",77],["Nicolas Batum","SF",75],
 ["Kevin Huerter","SG",75],["Buddy Hield","SG",76],["Tobias Harris","PF",77],["Brook Lopez","C",77],["Jonas Valanciunas","C",76],
@@ -216,7 +241,9 @@ const ROLLS=30, MAX=10, GAMES=24, TEAMS=10, PITY=15, ROLL_PRICE=100;
 const SIL={PG:"⛹️",SG:"🏃",SF:"🤾",PF:"💪",C:"🗼"};
 const AI_NAMES=["Harbor Hawks","Desert Vipers","Iron Wolves","Bay Sharks","Summit Owls","Neon Foxes","Delta Gators","Granite Bears","Storm Riders"];
 const tierIdx=o=>{let i=0;TIERS.forEach((t,j)=>{if(o>=t.min)i=j});return i};
-const players=DB.map(([name,pos,ovr],id)=>({id,name,pos,base:ovr,ovr,ti:tierIdx(ovr)}));
+const PHOTO=typeof ART==="object"?ART:{};
+const players=DB.map(([name,pos,ovr],id)=>({id,name,pos,base:ovr,ovr,ti:tierIdx(ovr),img:PHOTO[name]?.img}));
+const avatar=c=>c.img?`<img class="av" style="--tc:${TIERS[c.ti].c}" src="${c.img}" alt="" loading="lazy" referrerpolicy="no-referrer">`:`<span class="av" style="--tc:${TIERS[c.ti].c};display:flex;align-items:center;justify-content:center">${SIL[c.pos]}</span>`;
 const $=id=>document.getElementById(id);
 const rnd=n=>Math.floor(Math.random()*n);
 const shuffle=a=>a.sort(()=>Math.random()-.5);
@@ -244,15 +271,16 @@ function drawCards(P){
     let minI=0;
     if(meta.pity>=PITY-1) minI=AME;
     if(P.guarantee&&i===P.cards-1&&!out.some(c=>c.ti>=P.guarantee)) minI=P.guarantee;
-    let ti=rollTier(minI,P.boost), pool=[];
+    let ti=S.force!=null&&i===0?S.force:rollTier(minI,P.boost), pool=[];
     for(let t=ti;t>=0&&!pool.length;t--) pool=players.filter(p=>p.ti===t&&!taken.has(p.id));
     const base=pool[rnd(pool.length)]; taken.add(base.id);
-    const holo=Math.random()<.05;
+    const holo=Math.random()<.05||(i===0&&S.forceHolo);
     const c={...base,holo,ovr:Math.min(99,base.base+(holo?2:0)),uid:Math.random()};
     meta.pity=c.ti>=AME?0:meta.pity+1;
     if(!meta.col.includes(c.id)) {meta.col.push(c.id); c.isNew=true;}
     out.push(c);
   }
+  S.force=null; S.forceHolo=false;
   save("hooproll-meta2",meta);
   return out;
 }
@@ -264,7 +292,8 @@ const wait=ms=>skipping?Promise.resolve():new Promise(r=>setTimeout(r,ms));
 function bigCard(c){
   const t=TIERS[c.ti];
   return `<div class="pcard ${t.k==="opal"?"opal":""} ${c.ti>=AME?"dark":""} ${c.holo?"holo":""}" style="--tc:${t.c}">
-    <div class="o">${c.ovr}</div><div class="p">${c.pos}</div><div class="sil">${SIL[c.pos]}</div>
+    <div class="ph"><div class="sil">${SIL[c.pos]}</div>${c.img?`<img src="${c.img}" alt="${c.name}" referrerpolicy="no-referrer" onerror="this.remove()">`:""}</div>
+    <div class="o">${c.ovr}</div><div class="p">${c.pos}</div>
     <div class="n">${c.name}</div><div class="t">${t.n.toUpperCase()}${c.holo?" ✦ HOLO":""}${c.isNew?" · NEW":""}</div></div>`;
 }
 async function openPack(key){
@@ -410,7 +439,7 @@ function playoffs(){
 // ---------- render ----------
 function listCard(c,extra=""){
   const t=TIERS[c.ti];
-  return `<div class="card ${c.holo?"holo":""}" style="--tc:${t.c}"><span class="ovr">${c.ovr}</span><span class="nm">${c.name}<small>${c.pos} · ${t.n}${c.isNew?" · NEW":""}</small></span>${extra}</div>`;
+  return `<div class="card ${c.holo?"holo":""}" style="--tc:${t.c}">${avatar(c)}<span class="ovr">${c.ovr}</span><span class="nm">${c.name}<small>${c.pos} · ${t.n}${c.isNew?" · NEW":""}</small></span>${extra}</div>`;
 }
 function render(){
   $("sSeason").textContent=meta.season; $("sRolls").textContent=S.rolls; $("sCoins").textContent=meta.coins;
@@ -449,7 +478,7 @@ function render(){
   if(showCol){
     const have=new Set(meta.col);
     $("colGrid").innerHTML=[...players].sort((a,b)=>b.ovr-a.ovr).map(p=>
-      `<div class="${have.has(p.id)?"":"no"}" style="--tc:${TIERS[p.ti].c}"><b>${p.ovr}</b> ${have.has(p.id)?p.name:"???"}</div>`).join("");
+      `<div class="${have.has(p.id)?"":"no"}" style="--tc:${TIERS[p.ti].c}">${have.has(p.id)?avatar(p):""}<b>${p.ovr}</b> ${have.has(p.id)?p.name:"???"}</div>`).join("");
   }
 }
 
@@ -470,6 +499,54 @@ document.addEventListener("click",e=>{
   else if(b.id==="simAll"){while(S.phase==="season")simGame();render()}
   else if(b.id==="nextSeason"){meta.season++;save("hooproll-meta2",meta);newSeason()}
   else if(b.id==="colToggle"){showCol=!showCol;render()}
+});
+// ---------- admin (type "admin" anywhere) ----------
+let typed="";
+document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="INPUT") return;
+  typed=(typed+e.key.toLowerCase()).slice(-5);
+  if(typed==="admin"){typed="";$("adm").classList.toggle("hidden");fillPick()}
+  if(e.key==="Escape") $("adm").classList.add("hidden");
+});
+function fillPick(){
+  const q=$("admSearch").value.toLowerCase();
+  $("admPick").innerHTML=[...players].sort((a,b)=>b.ovr-a.ovr).filter(p=>p.name.toLowerCase().includes(q))
+    .map(p=>`<option value="${p.id}">${p.ovr} ${p.name}</option>`).join("");
+}
+$("admSearch").addEventListener("input",fillPick);
+const card0=p=>({...p,holo:false,uid:Math.random()});
+function admin(a){
+  const msg=t=>{$("admMsg").textContent=t};
+  if(a==="rolls"){S.rolls+=10;msg("+10 rolls")}
+  else if(a==="coins"){meta.coins+=1000;msg("+1000 coins")}
+  else if(a==="galaxy"){S.force=6;msg("Next pack's first card will be Galaxy")}
+  else if(a==="holo"){S.forceHolo=true;msg("Next pack's first card will be Holo")}
+  else if(a==="give"){
+    const p=players[+$("admPick").value]; if(!p) return;
+    if(S.phase!=="draft") return msg("Only during the draft");
+    S.pending.push(card0(p)); if(!meta.col.includes(p.id)) meta.col.push(p.id); msg(`Added ${p.name} to pulls`);
+  }
+  else if(a==="superteam"){
+    if(S.phase!=="draft") return msg("Only during the draft");
+    S.roster=[...players].sort((a,b)=>b.ovr-a.ovr).slice(0,MAX).map(card0); S.pending=[]; msg("Roster filled with the top 10");
+  }
+  else if(a==="clear"){if(S.phase==="draft"){S.roster=[];msg("Roster cleared")}}
+  else if(a==="playoffs"){if(S.phase==="season"){while(S.phase==="season")simGame();msg("Simmed to playoffs")}else msg("Start the season first")}
+  else if(a==="title"){meta.titles++;msg("+1 title")}
+  else if(a==="seasonup"){meta.season++;msg(`Season set to ${meta.season}`)}
+  else if(a==="collect"){meta.col=players.map(p=>p.id);msg("Collection unlocked")}
+  else if(a==="reset"){if(!confirm("Reset all progress?"))return;meta={season:1,titles:0,best:null,bestW:-1,coins:0,pity:0,col:[]};newSeason();msg("Progress reset")}
+  save("hooproll-meta2",meta); render();
+}
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-adm]"); if(b) admin(b.dataset.adm);
+  else if(e.target.id==="admClose"||e.target.id==="adm") $("adm").classList.add("hidden");
+  else if(e.target.id==="credToggle"){
+    const c=$("credits"), open=c.classList.toggle("hidden");
+    e.target.textContent=open?"Show":"Hide";
+    c.innerHTML="Player photos from Wikimedia Commons, used under their free licences:<br>"+Object.entries(PHOTO).map(([n,a])=>
+      `${n}: <a style="color:inherit" href="https://commons.wikimedia.org/wiki/File:${encodeURIComponent(a.file)}" target="_blank" rel="noopener">${a.by||"see file page"}</a> (${a.lic||"free licence"})`).join("<br>");
+  }
 });
 newSeason();
 </script>
