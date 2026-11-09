@@ -2,7 +2,7 @@
 // (pageimages only returns free images) and writes art.js with URL + credit.
 import fs from "fs";
 const dir = new URL("..", import.meta.url).pathname;
-const html = fs.readFileSync(dir + "index.html", "utf8");
+const html = fs.readFileSync(dir + "src/players.js", "utf8");
 const DB = eval(html.match(/const DB = (\[[\s\S]*?\n\]);/)[1]);
 const titleFor = JSON.parse(fs.readFileSync(dir + "tools/titles.json", "utf8"));
 const UA = { "User-Agent": "HoopRoll/1.0 (personal fan game)" };
