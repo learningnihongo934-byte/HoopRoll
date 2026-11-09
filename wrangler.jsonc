@@ -1,0 +1,9 @@
+{
+  // Hoop Roll: static assets only, served from dist/ (./build.sh deploy)
+  "name": "hooproll",
+  "compatibility_date": "2025-10-01",
+  "assets": { "directory": "dist" },
+  // hooproll.rennko.tech/* is more specific than Rennko Cloud's *.rennko.tech/* route, so this host stays here
+  "routes": [{ "pattern": "hooproll.rennko.tech", "custom_domain": true }, { "pattern": "hooproll.rennko.tech/*", "zone_name": "rennko.tech" }],
+  "workers_dev": true
+}

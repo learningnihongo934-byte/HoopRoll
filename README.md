@@ -4,7 +4,8 @@ Basketball roster-roll sim. Each season you get 30 rolls to open packs (Standard
 
 Single file: `index.html`. Ratings are rough fan estimates.
 
-    ./build.sh        # copies to dist/ and opens it
+    ./build.sh          # copies to dist/ and opens it
+    ./build.sh deploy   # publishes to https://hooproll.rennko.tech
 
 By Virat Reddy Kaukuntla.
 
